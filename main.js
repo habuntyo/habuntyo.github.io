@@ -1,7 +1,6 @@
 'use strict';
 
-// API ÉLÅ[ÇãLì¸
-var API_KEY = 'AIzaSyAXKTKw5vFQP0M1I3gZPmO5W59kOKoL3nI';
+var API_KEY = '<YOUR API KEY>';
 
 var curlCommandDiv = document.querySelector('.js-curl-command');
 var isPushEnabled = false;
@@ -16,13 +15,10 @@ function sendSubscriptionToServer(subscription) {
 function showCurlCommand(subscription) {
   // The curl command to trigger a push message straight from GCM
   var subscriptionId = subscription.subscriptionId;
-//  subscriptionId = "APA91bEW50mhzSGSEc6CLTmkAvIw53dVSS98wOHGlTxlVGN7V3zCLClEdJdfh-VfhgUkogX12kvr0hn0g7kUWechatbfTuI6YXxotHwl97VOOGpIt1Kk_gUsmLxKvPIOJcFp8F-hxIJ8JlYUScx6QIDy80IelTuFCQ";
   var endpoint = subscription.endpoint;
   var curlCommand = 'curl --header "Authorization: key=' + API_KEY +
     '" --header Content-Type:"application/json" ' + endpoint + 
-    ' -d "{\\"registration_ids\\":[\\"' + subscriptionId + '\\"],\\"data\\":{\\"message\\":\\"Hello\\"}}"';
-
-//%curl --header "Authorization: key=ÅÉAPI KEYÅÑ" --header Content-Type:"application/json" https://android.googleapis.com/gcm/send -d "{\"registration_ids\":[\"ÅÉRegistrationIDÅÑ\"],\"data\":{\"message\":\"Hello\"}}"
+    ' -d "{\\"registration_ids\\":[\\"' + subscriptionId + '\\"]}"';
 
   curlCommandDiv.textContent = curlCommand;
 }
@@ -78,12 +74,13 @@ function subscribe() {
   // we process the permission request
   var pushButton = document.querySelector('.js-push-button');
   pushButton.disabled = true;
+
   navigator.serviceWorker.ready.then(function(serviceWorkerRegistration) {
     serviceWorkerRegistration.pushManager.subscribe()
       .then(function(subscription) {
         // The subscription was successful
         isPushEnabled = true;
-        pushButton.textContent = 'Disable Push Messages!!';
+        pushButton.textContent = 'Disable Push Messages';
         pushButton.disabled = false;
 
         showCurlCommand(subscription);
@@ -107,7 +104,7 @@ function subscribe() {
           // and / or gcm_user_visible_only
           window.Demo.debug.log('Unable to subscribe to push.', e);
           pushButton.disabled = false;
-          pushButton.textContent = 'Enable Push Messages!!';
+          pushButton.textContent = 'Enable Push Messages';
         }
       });
   });
